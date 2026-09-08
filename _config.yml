@@ -1,0 +1,11 @@
+title: "Aksara Bumi"
+description: "Ruang untuk mencatat, membaca, dan berbagi gagasan."
+baseurl: "/aksara_bumi104"
+url: "https://aksarabumi104.github.io"
+
+markdown: kramdown
+theme: minima
+
+collections:
+  posts:
+    output: true
