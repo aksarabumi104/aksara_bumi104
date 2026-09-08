@@ -1,0 +1,364 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Bacaan — Aksara Bumi</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #f7f4ee;
+            color: #2f302b;
+            line-height: 1.7;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 22px 8%;
+
+            border-bottom: 1px solid #ddd7ca;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #45463e;
+            margin-left: 28px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #7b6548;
+        }
+
+
+        /* HEADER */
+
+        .header {
+
+            max-width: 900px;
+
+            margin: 90px auto 60px;
+
+            padding: 0 30px;
+
+        }
+
+        .header small {
+
+            color: #8a7659;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+        }
+
+        .header h1 {
+
+            font-size: 52px;
+
+            font-weight: normal;
+
+            margin: 15px 0;
+
+        }
+
+        .header p {
+
+            max-width: 650px;
+
+            color: #66665f;
+
+            font-size: 18px;
+
+        }
+
+
+        /* DAFTAR BACAAN */
+
+        .reading-list {
+
+            max-width: 900px;
+
+            margin: 0 auto;
+
+            padding: 0 30px;
+
+        }
+
+
+        .post {
+
+            padding: 30px 0;
+
+            border-top: 1px solid #ddd7ca;
+
+        }
+
+
+        .post small {
+
+            color: #8a7659;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            font-size: 12px;
+
+        }
+
+
+        .post h2 {
+
+            font-size: 30px;
+
+            font-weight: normal;
+
+            margin: 10px 0;
+
+        }
+
+
+        .post h2 a {
+
+            color: #2f302b;
+
+            text-decoration: none;
+
+        }
+
+
+        .post h2 a:hover {
+
+            color: #7b6548;
+
+        }
+
+
+        .post p {
+
+            color: #66665f;
+
+            max-width: 700px;
+
+        }
+
+
+        .read {
+
+            display: inline-block;
+
+            margin-top: 12px;
+
+            color: #4e5544;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+        }
+
+
+        /* FOOTER */
+
+        footer {
+
+            text-align: center;
+
+            padding: 35px;
+
+            margin-top: 80px;
+
+            border-top: 1px solid #ddd7ca;
+
+            color: #77776f;
+
+            font-size: 14px;
+
+        }
+
+
+        /* HP */
+
+        @media (max-width: 700px) {
+
+            nav {
+
+                padding: 18px 5%;
+
+            }
+
+            nav a {
+
+                margin-left: 12px;
+
+                font-size: 13px;
+
+            }
+
+            .header {
+
+                margin: 60px auto 40px;
+
+            }
+
+            .header h1 {
+
+                font-size: 40px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+        <div class="logo">
+            AKSARA BUMI
+        </div>
+
+        <div>
+
+            <a href="{{ '/' | relative_url }}">
+                Beranda
+            </a>
+
+            <a href="{{ '/bacaan.html' | relative_url }}">
+                Bacaan
+            </a>
+
+            <a href="{{ '/#tentang' | relative_url }}">
+                Tentang
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <section class="header">
+
+        <small>Arsip Tulisan</small>
+
+        <h1>
+            Bacaan
+        </h1>
+
+        <p>
+            Kumpulan catatan, gagasan, dan refleksi
+            yang saya tulis dari berbagai bacaan.
+        </p>
+
+    </section>
+
+
+    <!-- DAFTAR POST -->
+
+    <main class="reading-list">
+
+        {% for post in site.posts %}
+
+        <article class="post">
+
+            <small>
+
+                {% if post.categories %}
+
+                    {{ post.categories | join: " · " }}
+
+                {% else %}
+
+                    CATATAN
+
+                {% endif %}
+
+                ·
+
+                {{ post.date | date: "%d %B %Y" }}
+
+            </small>
+
+
+            <h2>
+
+                <a href="{{ post.url | relative_url }}">
+
+                    {{ post.title }}
+
+                </a>
+
+            </h2>
+
+
+            <p>
+
+                {{ post.excerpt | strip_html | truncate: 220 }}
+
+            </p>
+
+
+            <a href="{{ post.url | relative_url }}"
+               class="read">
+
+                Baca tulisan →
+
+            </a>
+
+        </article>
+
+        {% endfor %}
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        © 2026 Aksara Bumi · Catatan Bacaan
+
+    </footer>
+
+
+</body>
+
+</html>
