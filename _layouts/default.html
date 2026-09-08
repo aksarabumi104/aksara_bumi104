@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{{ page.title }} — Aksara Bumi</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #f7f4ee;
+            color: #2f302b;
+            line-height: 1.8;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 22px 8%;
+
+            background-color: #f7f4ee;
+
+            border-bottom: 1px solid #ddd7ca;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #45463e;
+
+            margin-left: 28px;
+
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #7b6548;
+        }
+
+
+        /* ARTIKEL */
+
+        .article-container {
+
+            max-width: 760px;
+
+            margin: 90px auto;
+
+            padding: 0 30px;
+
+        }
+
+
+        .article-category {
+
+            color: #8a7659;
+
+            font-size: 13px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .article-title {
+
+            font-size: 52px;
+
+            line-height: 1.2;
+
+            font-weight: normal;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .article-date {
+
+            color: #77776f;
+
+            font-size: 15px;
+
+            margin-bottom: 60px;
+
+        }
+
+
+        .article-content {
+
+            font-size: 18px;
+
+        }
+
+
+        .article-content h1 {
+
+            font-size: 36px;
+
+            font-weight: normal;
+
+            margin: 45px 0 20px;
+
+        }
+
+
+        .article-content h2 {
+
+            font-size: 30px;
+
+            font-weight: normal;
+
+            margin: 40px 0 15px;
+
+        }
+
+
+        .article-content h3 {
+
+            font-size: 24px;
+
+            font-weight: normal;
+
+            margin: 30px 0 10px;
+
+        }
+
+
+        .article-content p {
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .article-content a {
+
+            color: #4e5544;
+
+        }
+
+
+        .article-content blockquote {
+
+            margin: 30px 0;
+
+            padding: 20px 25px;
+
+            border-left: 3px solid #8a7659;
+
+            background-color: #fffdf8;
+
+            color: #5e5e57;
+
+        }
+
+
+        /* KEMBALI */
+
+        .back {
+
+            display: inline-block;
+
+            margin-top: 60px;
+
+            color: #4e5544;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+        }
+
+
+        .back:hover {
+
+            color: #7b6548;
+
+        }
+
+
+        /* FOOTER */
+
+        footer {
+
+            text-align: center;
+
+            padding: 35px;
+
+            margin-top: 80px;
+
+            border-top: 1px solid #ddd7ca;
+
+            color: #77776f;
+
+            font-size: 14px;
+
+        }
+
+
+        /* HP */
+
+        @media (max-width: 700px) {
+
+            nav {
+
+                padding: 18px 5%;
+
+            }
+
+            nav a {
+
+                margin-left: 12px;
+
+                font-size: 13px;
+
+            }
+
+            .article-container {
+
+                margin: 60px auto;
+
+            }
+
+            .article-title {
+
+                font-size: 40px;
+
+            }
+
+            .article-content {
+
+                font-size: 17px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+        <div class="logo">
+            AKSARA BUMI
+        </div>
+
+        <div>
+
+            <a href="{{ '/' | relative_url }}">
+                Beranda
+            </a>
+
+            <a href="{{ '/#bacaan' | relative_url }}">
+                Bacaan
+            </a>
+
+            <a href="{{ '/#tentang' | relative_url }}">
+                Tentang
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ARTIKEL -->
+
+    <main class="article-container">
+
+        <div class="article-category">
+
+            {% if page.categories %}
+
+                {{ page.categories | join: " · " }}
+
+            {% else %}
+
+                CATATAN
+
+            {% endif %}
+
+        </div>
+
+
+        <h1 class="article-title">
+
+            {{ page.title }}
+
+        </h1>
+
+
+        <div class="article-date">
+
+            {{ page.date | date: "%d %B %Y" }}
+
+        </div>
+
+
+        <div class="article-content">
+
+            {{ content }}
+
+        </div>
+
+
+        <a href="{{ '/' | relative_url }}#bacaan"
+           class="back">
+
+            ← Kembali ke semua bacaan
+
+        </a>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        © 2026 Aksara Bumi · Catatan Bacaan
+
+    </footer>
+
+
+</body>
+
+</html>
