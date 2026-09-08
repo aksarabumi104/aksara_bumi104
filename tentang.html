@@ -1,0 +1,242 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Tentang — Aksara Bumi</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #f7f4ee;
+            color: #2f302b;
+            line-height: 1.8;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 8%;
+            border-bottom: 1px solid #ddd7ca;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #45463e;
+            margin-left: 28px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #7b6548;
+        }
+
+        /* TENTANG */
+
+        .about {
+            max-width: 760px;
+            margin: 90px auto;
+            padding: 0 30px;
+        }
+
+        .about small {
+            color: #8a7659;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .about h1 {
+            font-size: 52px;
+            line-height: 1.2;
+            font-weight: normal;
+            margin: 18px 0 45px;
+        }
+
+        .about h2 {
+            font-size: 28px;
+            font-weight: normal;
+            margin: 45px 0 15px;
+        }
+
+        .about p {
+            font-size: 18px;
+            margin-bottom: 22px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 35px;
+            margin-top: 80px;
+            border-top: 1px solid #ddd7ca;
+            color: #77776f;
+            font-size: 14px;
+        }
+
+        /* HP */
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 18px 5%;
+            }
+
+            nav a {
+                margin-left: 12px;
+                font-size: 13px;
+            }
+
+            .about {
+                margin: 60px auto;
+            }
+
+            .about h1 {
+                font-size: 40px;
+            }
+
+            .about p {
+                font-size: 17px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+        <div class="logo">
+            AKSARA BUMI
+        </div>
+
+        <div>
+
+            <a href="{{ '/' | relative_url }}">
+                Beranda
+            </a>
+
+            <a href="{{ '/bacaan.html' | relative_url }}">
+                Bacaan
+            </a>
+
+            <a href="{{ '/tentang.html' | relative_url }}">
+                Tentang
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- TENTANG -->
+
+    <main class="about">
+
+        <small>Tentang Aksara Bumi</small>
+
+        <h1>
+            Membaca adalah cara lain
+            untuk memahami dunia.
+        </h1>
+
+
+        <p>
+            Aksara Bumi adalah ruang pribadi untuk
+            mencatat, memahami, dan membagikan gagasan
+            yang saya temukan melalui berbagai bacaan.
+        </p>
+
+        <p>
+            Di sini, saya tidak hanya ingin menyimpan
+            ringkasan buku atau artikel yang telah dibaca.
+            Saya ingin mencatat apa yang membuat saya
+            berpikir, apa yang saya pertanyakan, dan
+            bagaimana sebuah bacaan mengubah cara saya
+            melihat sesuatu.
+        </p>
+
+
+        <h2>
+            Apa yang ditulis di sini?
+        </h2>
+
+        <p>
+            Aksara Bumi berisi catatan tentang buku,
+            artikel, jurnal, sejarah, arkeologi, budaya,
+            masyarakat, serta berbagai gagasan lain yang
+            menarik untuk dipelajari.
+        </p>
+
+        <p>
+            Setiap tulisan merupakan bagian dari proses
+            belajar. Karena itu, tulisan di sini tidak
+            selalu dimaksudkan sebagai jawaban akhir.
+            Sebagian justru mungkin berangkat dari sebuah
+            pertanyaan.
+        </p>
+
+
+        <h2>
+            Mengapa Aksara Bumi dibuat?
+        </h2>
+
+        <p>
+            Karena membaca akan terasa lebih bermakna
+            ketika gagasan yang ditemukan tidak berhenti
+            di halaman buku.
+        </p>
+
+        <p>
+            Aksara Bumi menjadi tempat untuk membawa
+            gagasan tersebut keluar dari buku, kemudian
+            menghubungkannya dengan kehidupan, ilmu
+            pengetahuan, dan cara saya memahami dunia.
+        </p>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        © 2026 Aksara Bumi · Catatan Bacaan
+
+    </footer>
+
+
+</body>
+
+</html>
