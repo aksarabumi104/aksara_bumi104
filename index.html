@@ -4,14 +4,312 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Website Iko</title>
+    <title>Aksara Bumi — Catatan Bacaan</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #f7f4ee;
+            color: #2f302b;
+            line-height: 1.7;
+        }
+
+        /* NAVBAR */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 8%;
+            background-color: #f7f4ee;
+            border-bottom: 1px solid #ddd7ca;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #45463e;
+            margin-left: 28px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #7b6548;
+        }
+
+        /* HERO */
+        .hero {
+            max-width: 900px;
+            margin: 100px auto;
+            padding: 0 30px;
+        }
+
+        .hero small {
+            color: #8a7659;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.15;
+            margin: 20px 0;
+            font-weight: normal;
+        }
+
+        .hero p {
+            max-width: 650px;
+            font-size: 19px;
+            color: #66665f;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background-color: #4e5544;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .button:hover {
+            background-color: #3e4437;
+        }
+
+        /* CONTENT */
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 30px;
+            font-weight: normal;
+            margin-bottom: 30px;
+        }
+
+        .articles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .article {
+            background-color: #fffdf8;
+            padding: 30px;
+            border: 1px solid #e1dbcf;
+            border-radius: 6px;
+        }
+
+        .article small {
+            color: #8a7659;
+        }
+
+        .article h2 {
+            font-size: 24px;
+            font-weight: normal;
+            margin: 12px 0;
+        }
+
+        .article p {
+            color: #6b6b64;
+        }
+
+        .read {
+            display: inline-block;
+            margin-top: 18px;
+            color: #4e5544;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* ABOUT */
+        .about {
+            max-width: 1000px;
+            margin: 100px auto;
+            padding: 50px 30px;
+            border-top: 1px solid #ddd7ca;
+        }
+
+        .about h2 {
+            font-size: 30px;
+            font-weight: normal;
+            margin-bottom: 15px;
+        }
+
+        .about p {
+            max-width: 700px;
+            color: #66665f;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 35px;
+            margin-top: 60px;
+            border-top: 1px solid #ddd7ca;
+            color: #77776f;
+            font-size: 14px;
+        }
+
+        /* HP */
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 18px 5%;
+            }
+
+            nav a {
+                margin-left: 12px;
+                font-size: 13px;
+            }
+
+            .hero {
+                margin: 70px auto;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            .articles {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Halo, dunia!</h1>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">AKSARA BUMI</div>
 
-    <p>Ini adalah website pertama saya menggunakan GitHub Pages.</p>
+        <div>
+            <a href="#beranda">Beranda</a>
+            <a href="#bacaan">Bacaan</a>
+            <a href="#tentang">Tentang</a>
+        </div>
+    </nav>
+
+
+    <!-- HERO -->
+    <section class="hero" id="beranda">
+
+        <small>Catatan Bacaan</small>
+
+        <h1>
+            Membaca dunia,<br>
+            satu tulisan pada satu waktu.
+        </h1>
+
+        <p>
+            Aksara Bumi adalah ruang untuk mencatat,
+            memahami, dan membagikan gagasan yang saya
+            temukan dari berbagai bacaan.
+        </p>
+
+        <a href="#bacaan" class="button">
+            Jelajahi tulisan
+        </a>
+
+    </section>
+
+
+    <!-- ARTIKEL -->
+    <section class="content" id="bacaan">
+
+        <h2 class="section-title">
+            Tulisan Terbaru
+        </h2>
+
+        <div class="articles">
+
+            <article class="article">
+
+                <small>SEJARAH · 8 SEPTEMBER 2026</small>
+
+                <h2>
+                    Mengapa Kita Perlu Membaca Masa Lalu?
+                </h2>
+
+                <p>
+                    Catatan pemikiran tentang bagaimana
+                    membaca sejarah dapat membantu kita
+                    memahami dunia yang kita tinggali.
+                </p>
+
+                <a href="#" class="read">
+                    Baca tulisan →
+                </a>
+
+            </article>
+
+
+            <article class="article">
+
+                <small>ARKEOLOGI · CATATAN</small>
+
+                <h2>
+                    Ketika Benda Menceritakan Sesuatu
+                </h2>
+
+                <p>
+                    Sebuah catatan tentang bagaimana
+                    benda-benda masa lalu dapat menjadi
+                    sumber pengetahuan.
+                </p>
+
+                <a href="#" class="read">
+                    Baca tulisan →
+                </a>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- TENTANG -->
+    <section class="about" id="tentang">
+
+        <h2>
+            Tentang Aksara Bumi
+        </h2>
+
+        <p>
+            Aksara Bumi merupakan ruang pribadi untuk
+            mendokumentasikan hasil bacaan, gagasan,
+            pertanyaan, dan refleksi yang muncul selama
+            proses membaca.
+        </p>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        © 2026 Aksara Bumi · Catatan Bacaan
+
+    </footer>
 
 </body>
 </html>
