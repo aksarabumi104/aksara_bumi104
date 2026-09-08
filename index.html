@@ -1,10 +1,13 @@
+---
+---
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Aksara Bumi — Catatan Bacaan</title>
+    <title>{{ site.title }} — Catatan Bacaan</title>
 
     <style>
         * {
@@ -115,6 +118,7 @@
 
         .article small {
             color: #8a7659;
+            text-transform: uppercase;
         }
 
         .article h2 {
@@ -133,6 +137,10 @@
             color: #4e5544;
             text-decoration: none;
             font-weight: bold;
+        }
+
+        .read:hover {
+            color: #7b6548;
         }
 
         /* ABOUT */
@@ -199,13 +207,17 @@
 
     <!-- NAVBAR -->
     <nav>
-        <div class="logo">AKSARA BUMI</div>
+
+        <div class="logo">
+            AKSARA BUMI
+        </div>
 
         <div>
             <a href="#beranda">Beranda</a>
             <a href="#bacaan">Bacaan</a>
             <a href="#tentang">Tentang</a>
         </div>
+
     </nav>
 
 
@@ -241,46 +253,35 @@
 
         <div class="articles">
 
+            {% for post in site.posts %}
+
             <article class="article">
 
-                <small>SEJARAH · 8 SEPTEMBER 2026</small>
+                <small>
+                    {% if post.categories %}
+                        {{ post.categories | join: " · " }}
+                    {% else %}
+                        CATATAN
+                    {% endif %}
+                    ·
+                    {{ post.date | date: "%d %B %Y" }}
+                </small>
 
                 <h2>
-                    Mengapa Kita Perlu Membaca Masa Lalu?
+                    {{ post.title }}
                 </h2>
 
                 <p>
-                    Catatan pemikiran tentang bagaimana
-                    membaca sejarah dapat membantu kita
-                    memahami dunia yang kita tinggali.
+                    {{ post.excerpt | strip_html | truncate: 180 }}
                 </p>
 
-                <a href="#" class="read">
+                <a href="{{ post.url | relative_url }}" class="read">
                     Baca tulisan →
                 </a>
 
             </article>
 
-
-            <article class="article">
-
-                <small>ARKEOLOGI · CATATAN</small>
-
-                <h2>
-                    Ketika Benda Menceritakan Sesuatu
-                </h2>
-
-                <p>
-                    Sebuah catatan tentang bagaimana
-                    benda-benda masa lalu dapat menjadi
-                    sumber pengetahuan.
-                </p>
-
-                <a href="#" class="read">
-                    Baca tulisan →
-                </a>
-
-            </article>
+            {% endfor %}
 
         </div>
 
