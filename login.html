@@ -60,9 +60,16 @@
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
 
     const supabaseClient = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+);
 
     async function daftar() {
       const email = document.getElementById("email").value;
