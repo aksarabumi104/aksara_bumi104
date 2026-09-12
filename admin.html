@@ -206,19 +206,58 @@ async function cekAuthor() {
 }
 
 async function simpanDraft() {
-  const judul = document.getElementById("judul").value;
+  const judul = document.getElementById("judul").value.trim();
   const kategori = document.getElementById("kategori").value;
-  const isi = document.getElementById("isi").value;
+  const isi = document.getElementById("isi").value.trim();
 
-  if (!judul.trim()) {
+  if (!judul) {
     alert("Judul artikel belum diisi.");
     return;
   }
 
-  if (!isi.trim()) {
+  if (!isi) {
     alert("Isi artikel belum diisi.");
     return;
   }
+
+  const slug = judul
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+    alert("Sesi login sudah berakhir. Silakan login kembali.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("articles")
+    .insert({
+      title: judul,
+      slug: slug,
+      category: kategori,
+      content: isi,
+      status: "draft",
+      author_id: session.user.id
+    });
+
+  if (error) {
+    console.error(error);
+    alert("Gagal menyimpan draft: " + error.message);
+    return;
+  }
+
+  alert("Draft artikel berhasil disimpan.");
+
+  document.getElementById("judul").value = "";
+  document.getElementById("isi").value = "";
+}
 
   alert(
     "Form artikel sudah berfungsi. Penyimpanan draft akan kita buat setelah ini."
