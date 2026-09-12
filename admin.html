@@ -143,10 +143,17 @@
       "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
 
     const supabaseClient =
-      supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+  );
 
 
     async function cekAuthor() {
