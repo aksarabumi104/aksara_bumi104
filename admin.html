@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Dashboard Penulis — Aksara Bumi</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -10,22 +11,75 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 700px;
-      margin: 60px auto;
+      max-width: 800px;
+      margin: 40px auto;
       padding: 20px;
       line-height: 1.6;
     }
 
-    #status {
-      padding: 15px;
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    .welcome {
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .card {
       border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 25px;
       margin-top: 20px;
     }
 
-    button {
-      padding: 10px 16px;
-      cursor: pointer;
+    label {
+      display: block;
+      font-weight: bold;
       margin-top: 15px;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 300px;
+      resize: vertical;
+    }
+
+    button {
+      padding: 11px 18px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .publish-button {
+      background: #222;
+      color: white;
+    }
+
+    .logout-button {
+      background: #eee;
+      color: #222;
+    }
+
+    #status {
+      padding: 12px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -34,89 +88,185 @@
 
   <h1>Dashboard Penulis</h1>
 
-  <div id="status">Memeriksa akun...</div>
+  <div id="status">
+    Memeriksa akun...
+  </div>
 
-  <button onclick="logout()">Keluar</button>
+  <div class="card" id="editor" style="display:none;">
+
+    <h2>Tulis Artikel</h2>
+
+    <label for="judul">Judul Artikel</label>
+    <input
+      type="text"
+      id="judul"
+      placeholder="Masukkan judul artikel"
+    >
+
+    <label for="kategori">Kategori</label>
+    <select id="kategori">
+      <option value="catatan-bacaan">Catatan Bacaan</option>
+      <option value="arkeologi">Arkeologi</option>
+      <option value="sejarah">Sejarah</option>
+      <option value="budaya">Budaya</option>
+      <option value="lainnya">Lainnya</option>
+    </select>
+
+    <label for="isi">Isi Artikel</label>
+    <textarea
+      id="isi"
+      placeholder="Tulis artikelmu di sini..."
+    ></textarea>
+
+    <button
+      class="publish-button"
+      onclick="simpanDraft()"
+    >
+      Simpan sebagai Draft
+    </button>
+
+    <button
+      class="logout-button"
+      onclick="logout()"
+    >
+      Keluar
+    </button>
+
+  </div>
 
   <script>
-    const SUPABASE_URL = "https://dzmmjilhqqgqhbikxbpi.supabase.co";
+
+    const SUPABASE_URL =
+      "https://dzmmjilhqqqghbikxbpi.supabase.co";
 
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
 
-    const supabaseClient = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
 
     async function cekAuthor() {
-      const status = document.getElementById("status");
 
-      // Cek sesi login yang tersimpan di browser
+      const status =
+        document.getElementById("status");
+
+      const editor =
+        document.getElementById("editor");
+
+
       const {
         data: { session },
         error: sessionError
       } = await supabaseClient.auth.getSession();
 
-      if (sessionError) {
-        status.textContent =
-          "Terjadi masalah saat memeriksa sesi login.";
-        console.error(sessionError);
-        return;
-      }
 
-      if (!session) {
+      if (sessionError || !session) {
+
         status.textContent =
           "Kamu belum login. Silakan masuk terlebih dahulu.";
+
         return;
       }
 
-      // Ambil data pengguna yang sedang login
+
       const {
         data: { user },
         error: userError
       } = await supabaseClient.auth.getUser();
 
+
       if (userError || !user) {
+
         status.textContent =
-          "Akun tidak ditemukan. Silakan login kembali.";
+          "Akun tidak ditemukan.";
+
         return;
       }
 
-      // Cek role pengguna
-      const { data: profile, error: profileError } =
-        await supabaseClient
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .single();
+
+      const {
+        data: profile,
+        error: profileError
+      } = await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
 
       if (profileError || !profile) {
+
         status.textContent =
           "Profil akun tidak ditemukan.";
-        console.error(profileError);
+
         return;
       }
 
-      // Pastikan hanya author yang boleh masuk
+
       if (profile.role !== "author") {
+
         status.textContent =
           "Akses ditolak. Halaman ini khusus penulis.";
+
         return;
       }
 
+
       status.innerHTML =
-        "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br><br>" +
+        "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br>" +
         "Email: " + user.email + "<br>" +
         "Role: " + profile.role;
+
+
+      editor.style.display = "block";
     }
+
+
+    async function simpanDraft() {
+
+      const judul =
+        document.getElementById("judul").value;
+
+      const kategori =
+        document.getElementById("kategori").value;
+
+      const isi =
+        document.getElementById("isi").value;
+
+
+      if (!judul.trim()) {
+        alert("Judul artikel belum diisi.");
+        return;
+      }
+
+
+      if (!isi.trim()) {
+        alert("Isi artikel belum diisi.");
+        return;
+      }
+
+
+      alert(
+        "Form artikel sudah berfungsi. Sistem penyimpanan draft akan kita sambungkan pada langkah berikutnya."
+      );
+    }
+
 
     async function logout() {
+
       await supabaseClient.auth.signOut();
-      window.location.href = "login.html";
+
+      window.location.href =
+        "login.html";
     }
 
+
     cekAuthor();
+
   </script>
 
 </body>
