@@ -15,6 +15,7 @@
       margin: 40px auto;
       padding: 20px;
       line-height: 1.6;
+      background: #fafafa;
     }
 
     h1 {
@@ -22,11 +23,12 @@
     }
 
     .welcome {
+      margin-bottom: 20px;
       color: #555;
-      margin-bottom: 30px;
     }
 
     .card {
+      background: white;
       border: 1px solid #ddd;
       border-radius: 10px;
       padding: 25px;
@@ -63,9 +65,10 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 15px;
     }
 
-    .publish-button {
+    .save-button {
       background: #222;
       color: white;
     }
@@ -73,13 +76,19 @@
     .logout-button {
       background: #eee;
       color: #222;
+      margin-left: 8px;
     }
 
     #status {
-      padding: 12px;
-      background: #f5f5f5;
+      padding: 14px;
+      background: #f0f0f0;
       border-radius: 6px;
       margin-top: 20px;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -92,7 +101,7 @@
     Memeriksa akun...
   </div>
 
-  <div class="card" id="editor" style="display:none;">
+  <div class="card" id="editor" style="display: none;">
 
     <h2>Tulis Artikel</h2>
 
@@ -119,7 +128,7 @@
     ></textarea>
 
     <button
-      class="publish-button"
+      class="save-button"
       onclick="simpanDraft()"
     >
       Simpan sebagai Draft
@@ -132,146 +141,175 @@
       Keluar
     </button>
 
+    <div id="message"></div>
+
   </div>
 
   <script>
+    const SUPABASE_URL =
+      "https://dzmmjilhqqqghbikxbpi.supabase.co";
 
-  const SUPABASE_URL =
-  "https://dzmmjilhqqgqhbikxbpi.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
 
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
+    );
 
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
+    async function cekAuthor() {
+      const status =
+        document.getElementById("status");
+
+      const editor =
+        document.getElementById("editor");
+
+      const {
+        data: { session },
+        error: sessionError
+      } = await supabaseClient.auth.getSession();
+
+      if (sessionError) {
+        status.textContent =
+          "Gagal membaca sesi login.";
+
+        console.error(sessionError);
+        return;
+      }
+
+      if (!session) {
+        status.textContent =
+          "Kamu belum login. Silakan masuk terlebih dahulu.";
+
+        return;
+      }
+
+      const user = session.user;
+
+      const {
+        data: profile,
+        error: profileError
+      } = await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      if (profileError || !profile) {
+        status.textContent =
+          "Profil akun tidak ditemukan.";
+
+        console.error(profileError);
+        return;
+      }
+
+      if (profile.role !== "author") {
+        status.textContent =
+          "Akses ditolak. Halaman ini khusus penulis.";
+
+        return;
+      }
+
+      status.innerHTML =
+        "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br>" +
+        "Email: " + user.email + "<br>" +
+        "Role: " + profile.role;
+
+      editor.style.display = "block";
     }
-  }
-);
 
-async function cekAuthor() {
-  const status = document.getElementById("status");
-  const editor = document.getElementById("editor");
+    async function simpanDraft() {
+      const message =
+        document.getElementById("message");
 
-  // Tunggu sesi dipulihkan dari browser
-  const {
-    data: { session },
-    error
-  } = await supabaseClient.auth.getSession();
+      const judul =
+        document.getElementById("judul").value.trim();
 
-  if (error) {
-    status.textContent = "Gagal membaca sesi login.";
-    console.error(error);
-    return;
-  }
+      const kategori =
+        document.getElementById("kategori").value;
 
-  if (!session) {
-    status.textContent =
-      "Kamu belum login. Silakan masuk terlebih dahulu.";
-    return;
-  }
+      const isi =
+        document.getElementById("isi").value.trim();
 
-  const user = session.user;
+      message.textContent = "";
 
-  const { data: profile, error: profileError } =
-    await supabaseClient
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+      if (!judul) {
+        message.textContent =
+          "Judul artikel belum diisi.";
 
-  if (profileError || !profile) {
-    status.textContent = "Profil akun tidak ditemukan.";
-    console.error(profileError);
-    return;
-  }
+        return;
+      }
 
-  if (profile.role !== "author") {
-    status.textContent =
-      "Akses ditolak. Halaman ini khusus penulis.";
-    return;
-  }
+      if (!isi) {
+        message.textContent =
+          "Isi artikel belum diisi.";
 
-  status.innerHTML =
-    "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br>" +
-    "Email: " + user.email + "<br>" +
-    "Role: " + profile.role;
+        return;
+      }
 
-  editor.style.display = "block";
-}
+      const slug = judul
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-");
 
-async function simpanDraft() {
-  const judul = document.getElementById("judul").value.trim();
-  const kategori = document.getElementById("kategori").value;
-  const isi = document.getElementById("isi").value.trim();
+      const {
+        data: { session },
+        error: sessionError
+      } = await supabaseClient.auth.getSession();
 
-  if (!judul) {
-    alert("Judul artikel belum diisi.");
-    return;
-  }
+      if (sessionError || !session) {
+        message.textContent =
+          "Sesi login sudah berakhir. Silakan login kembali.";
 
-  if (!isi) {
-    alert("Isi artikel belum diisi.");
-    return;
-  }
+        return;
+      }
 
-  const slug = judul
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
+      const { error } =
+        await supabaseClient
+          .from("articles")
+          .insert({
+            title: judul,
+            slug: slug,
+            category: kategori,
+            content: isi,
+            status: "draft",
+            author_id: session.user.id
+          });
 
-  const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
+      if (error) {
+        console.error(error);
 
-  if (!session) {
-    alert("Sesi login sudah berakhir. Silakan login kembali.");
-    window.location.href = "login.html";
-    return;
-  }
+        message.textContent =
+          "Gagal menyimpan draft: " +
+          error.message;
 
-  const { error } = await supabaseClient
-    .from("articles")
-    .insert({
-      title: judul,
-      slug: slug,
-      category: kategori,
-      content: isi,
-      status: "draft",
-      author_id: session.user.id
-    });
+        return;
+      }
 
-  if (error) {
-    console.error(error);
-    alert("Gagal menyimpan draft: " + error.message);
-    return;
-  }
+      message.textContent =
+        "Draft artikel berhasil disimpan.";
 
-  alert("Draft artikel berhasil disimpan.");
+      document.getElementById("judul").value = "";
+      document.getElementById("isi").value = "";
+    }
 
-  document.getElementById("judul").value = "";
-  document.getElementById("isi").value = "";
-}
+    async function logout() {
+      await supabaseClient.auth.signOut();
 
-  alert(
-    "Form artikel sudah berfungsi. Penyimpanan draft akan kita buat setelah ini."
-  );
-}
+      window.location.href =
+        "login.html";
+    }
 
-async function logout() {
-  await supabaseClient.auth.signOut();
-  window.location.href = "login.html";
-}
-
-cekAuthor();
-
-</script>
+    cekAuthor();
+  </script>
 
 </body>
 </html>
