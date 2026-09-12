@@ -39,9 +39,10 @@
   <button onclick="logout()">Keluar</button>
 
   <script>
-    const SUPABASE_URL = "https://dzmmjilhqqqghbikxbpi.supabase.co";
+    const SUPABASE_URL = "https://dzmmjilhqqgqhbikxbpi.supabase.co";
 
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
 
     const supabaseClient = supabase.createClient(
       SUPABASE_URL,
@@ -51,6 +52,26 @@
     async function cekAuthor() {
       const status = document.getElementById("status");
 
+      // Cek sesi login yang tersimpan di browser
+      const {
+        data: { session },
+        error: sessionError
+      } = await supabaseClient.auth.getSession();
+
+      if (sessionError) {
+        status.textContent =
+          "Terjadi masalah saat memeriksa sesi login.";
+        console.error(sessionError);
+        return;
+      }
+
+      if (!session) {
+        status.textContent =
+          "Kamu belum login. Silakan masuk terlebih dahulu.";
+        return;
+      }
+
+      // Ambil data pengguna yang sedang login
       const {
         data: { user },
         error: userError
@@ -58,10 +79,11 @@
 
       if (userError || !user) {
         status.textContent =
-          "Kamu belum login. Silakan masuk terlebih dahulu.";
+          "Akun tidak ditemukan. Silakan login kembali.";
         return;
       }
 
+      // Cek role pengguna
       const { data: profile, error: profileError } =
         await supabaseClient
           .from("profiles")
@@ -72,9 +94,11 @@
       if (profileError || !profile) {
         status.textContent =
           "Profil akun tidak ditemukan.";
+        console.error(profileError);
         return;
       }
 
+      // Pastikan hanya author yang boleh masuk
       if (profile.role !== "author") {
         status.textContent =
           "Akses ditolak. Halaman ini khusus penulis.";
@@ -82,7 +106,7 @@
       }
 
       status.innerHTML =
-        "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br>" +
+        "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br><br>" +
         "Email: " + user.email + "<br>" +
         "Role: " + profile.role;
     }
