@@ -4,12 +4,96 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Penulis — Aksara Bumi</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    #status {
+      padding: 15px;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 16px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 
 <body>
 
   <h1>Dashboard Penulis</h1>
-  <p>Halaman khusus penulis Aksara Bumi.</p>
+
+  <div id="status">Memeriksa akun...</div>
+
+  <button onclick="logout()">Keluar</button>
+
+  <script>
+    const SUPABASE_URL = "https://dzmmjilhqqqghbikxbpi.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY = "......";
+
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    async function cekAuthor() {
+      const status = document.getElementById("status");
+
+      const {
+        data: { user },
+        error: userError
+      } = await supabaseClient.auth.getUser();
+
+      if (userError || !user) {
+        status.textContent =
+          "Kamu belum login. Silakan masuk terlebih dahulu.";
+        return;
+      }
+
+      const { data: profile, error: profileError } =
+        await supabaseClient
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+
+      if (profileError || !profile) {
+        status.textContent =
+          "Profil akun tidak ditemukan.";
+        return;
+      }
+
+      if (profile.role !== "author") {
+        status.textContent =
+          "Akses ditolak. Halaman ini khusus penulis.";
+        return;
+      }
+
+      status.innerHTML =
+        "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br>" +
+        "Email: " + user.email + "<br>" +
+        "Role: " + profile.role;
+    }
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    }
+
+    cekAuthor();
+  </script>
 
 </body>
 </html>
