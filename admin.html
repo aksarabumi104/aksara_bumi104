@@ -136,153 +136,98 @@
 
   <script>
 
-    const SUPABASE_URL =
-      "https://dzmmjilhqqqghbikxbpi.supabase.co";
+   const SUPABASE_URL =
+  "https://dzmmjilhqqgqhbikxbpi.supabase.co";
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
 
-    const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY,
-    {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
-      }
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
     }
-  );
+  }
+);
 
+async function cekAuthor() {
+  const status = document.getElementById("status");
+  const editor = document.getElementById("editor");
 
-    async function cekAuthor() {
+  // Tunggu sesi dipulihkan dari browser
+  const {
+    data: { session },
+    error
+  } = await supabaseClient.auth.getSession();
 
-      const status =
-        document.getElementById("status");
-
-      const editor =
-        document.getElementById("editor");
-
-
-      const {
-        data: { session },
-        error: sessionError
-      } = await supabaseClient.auth.getSession();
-
-
-      if (sessionError || !session) {
-
-        status.textContent =
-          "Kamu belum login. Silakan masuk terlebih dahulu.";
-
-        return;
-      }
-
-
-      const {
-        data: { user },
-        error: userError
-      } = await supabaseClient.auth.getUser();
-
-
-      if (userError || !user) {
-
-        status.textContent =
-          "Akun tidak ditemukan.";
-
-        return;
-      }
-
-
-      const {
-        data: profile,
-        error: profileError
-      } = await supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-
-
-      if (profileError || !profile) {
-
-        status.textContent =
-          "Profil akun tidak ditemukan.";
-
-        return;
-      }
-
-
-      if (profile.role !== "author") {
-
-        status.textContent =
-          "Akses ditolak. Halaman ini khusus penulis.";
-
-        return;
-      }
-
-
-      status.innerHTML =
-        "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br>" +
-        "Email: " + user.email + "<br>" +
-        "Role: " + profile.role;
-
-
-      editor.style.display = "block";
-    }
-
-
-    async function simpanDraft() {
-
-      const judul =
-        document.getElementById("judul").value;
-
-      const kategori =
-        document.getElementById("kategori").value;
-
-      const isi =
-        document.getElementById("isi").value;
-
-
-      if (!judul.trim()) {
-        alert("Judul artikel belum diisi.");
-        return;
-      }
-
-
-      if (!isi.trim()) {
-        alert("Isi artikel belum diisi.");
-        return;
-      }
-
-
-      alert(
-        "Form artikel sudah berfungsi. Sistem penyimpanan draft akan kita sambungkan pada langkah berikutnya."
-      );
-    }
-
-
-  async function logout() {
-
-  await supabaseClient.auth.signOut();
-
-  window.location.href =
-    "login.html";
-}
-
-
-supabaseClient.auth.onAuthStateChange((event, session) => {
-
-  if (session) {
-    cekAuthor();
-  } else {
-    document.getElementById("status").textContent =
-      "Kamu belum login. Silakan masuk terlebih dahulu.";
+  if (error) {
+    status.textContent = "Gagal membaca sesi login.";
+    console.error(error);
+    return;
   }
 
-});
-</script>
+  if (!session) {
+    status.textContent =
+      "Kamu belum login. Silakan masuk terlebih dahulu.";
+    return;
+  }
 
-</body>
-</html>
+  const user = session.user;
+
+  const { data: profile, error: profileError } =
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+  if (profileError || !profile) {
+    status.textContent = "Profil akun tidak ditemukan.";
+    console.error(profileError);
+    return;
+  }
+
+  if (profile.role !== "author") {
+    status.textContent =
+      "Akses ditolak. Halaman ini khusus penulis.";
+    return;
+  }
+
+  status.innerHTML =
+    "<strong>Selamat datang, Penulis Aksara Bumi.</strong><br>" +
+    "Email: " + user.email + "<br>" +
+    "Role: " + profile.role;
+
+  editor.style.display = "block";
+}
+
+async function simpanDraft() {
+  const judul = document.getElementById("judul").value;
+  const kategori = document.getElementById("kategori").value;
+  const isi = document.getElementById("isi").value;
+
+  if (!judul.trim()) {
+    alert("Judul artikel belum diisi.");
+    return;
+  }
+
+  if (!isi.trim()) {
+    alert("Isi artikel belum diisi.");
+    return;
+  }
+
+  alert(
+    "Form artikel sudah berfungsi. Penyimpanan draft akan kita buat setelah ini."
+  );
+}
+
+async function logout() {
+  await supabaseClient.auth.signOut();
+  window.location.href = "login.html";
+}
+
+cekAuthor();
