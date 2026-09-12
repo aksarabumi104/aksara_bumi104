@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk — Aksara Bumi</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 420px;
+      margin: 60px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Aksara Bumi</h1>
+  <p style="text-align:center;">Masuk atau buat akun untuk ikut berdiskusi.</p>
+
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+
+  <button onclick="daftar()">Daftar</button>
+  <button onclick="login()">Masuk</button>
+
+  <p id="message"></p>
+
+  <script>
+    const SUPABASE_URL = "https://dzmmjlhqqqghbikxbpi.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Sh5FUzXDqdpB9HjMmp_Shw_4FQXzl8J";
+
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    async function daftar() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        document.getElementById("message").textContent =
+          error.message;
+        return;
+      }
+
+      document.getElementById("message").textContent =
+        "Pendaftaran berhasil. Silakan cek email untuk verifikasi akun.";
+    }
+
+    async function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        document.getElementById("message").textContent =
+          error.message;
+        return;
+      }
+
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>
